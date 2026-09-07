@@ -20,7 +20,6 @@
     --ink-soft:#4B5563;
     --line:#DCE2E6;
     --card:#FFFFFF;
-    
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -153,6 +152,60 @@
     color:var(--ink);
   }
   .meta input:focus{outline:none; border-bottom-color:var(--teal-500);}
+
+  .start-panel{
+    margin:26px 44px 0;
+    background:var(--card);
+    border-radius:12px;
+    padding:22px 26px;
+    box-shadow:0 6px 20px rgba(10,25,41,0.06);
+  }
+  .start-panel p{
+    margin:0 0 18px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    max-width:600px;
+  }
+  #btn-start{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    padding:12px 26px;
+    border-radius:8px;
+    border:none;
+    background:var(--teal-500);
+    color:#04201E;
+    cursor:pointer;
+  }
+  #btn-start:hover{background:#0dbdbd;}
+  #start-error{
+    display:inline-block;
+    margin-left:14px;
+    color:var(--coral-500);
+    font-size:13.5px;
+  }
+
+  .timer-bar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--navy-950);
+    color:#fff;
+    padding:12px 44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:14px;
+  }
+  #timer-candidato{color:#B9C6D3;}
+  #timer-clock{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:20px;
+    letter-spacing:0.03em;
+    color:var(--teal-500);
+  }
+  #timer-clock.low{color:var(--coral-500);}
 
   /* ---------- Body content ---------- */
   .content{
@@ -359,6 +412,8 @@
     header, .content, footer{padding-left:22px; padding-right:22px;}
     .meta{margin-left:22px; margin-right:22px; grid-template-columns:repeat(2,1fr);}
     .meta div:nth-child(2){border-right:none;}
+    .start-panel{margin-left:22px; margin-right:22px;}
+    .timer-bar{padding:12px 22px;}
     .q-case, .options{margin-left:0;}
     textarea.answer{margin-left:0; width:100%;}
     .save-bar{padding:14px 22px; flex-wrap:wrap;}
@@ -368,6 +423,7 @@
 <body>
 <div class="page">
 
+<div id="start-screen">
   <header>
     <div class="brand-row">
       <div class="brand-mark"></div>
@@ -384,10 +440,25 @@
     <div><label>Evaluador</label><input id="meta-evaluador" type="text" placeholder="Nombre del evaluador"></div>
   </div>
 
+  <div class="start-panel">
+    <p>Esta prueba tiene una duración total de <strong>60 minutos</strong>, cronometrados desde que hagas clic en "Iniciar prueba". No necesitas conocimiento previo de GPS o flotas — todo el contexto que requieres está en cada enunciado. Completa tu nombre arriba antes de iniciar.</p>
+    <button id="btn-start" type="button">Iniciar prueba</button>
+    <span id="start-error"></span>
+  </div>
+</div>
+
+<div id="test-screen" style="display:none;">
+
+  <div class="timer-bar">
+    <span id="timer-candidato"></span>
+    <span id="timer-clock">60:00</span>
+  </div>
+
+
   <div class="content">
 
     <div class="intro">
-      <strong>Instrucciones generales.</strong> Esta prueba tiene una duración total de 60 minutos, divididos en 5 bloques cronometrados. No necesitas conocimiento previo de GPS o flotas — todo el contexto que requieres está en cada enunciado. En cada pregunta escribe brevemente tu razonamiento antes de la respuesta final: nos interesa más <em>cómo</em> llegaste a ella que si es exacta. Al terminar, tendrás 5 minutos para explicar en voz alta cómo resolviste una pregunta a tu elección de los Bloques 2 o 3. Puedes escribir tus respuestas directamente aquí y descargarlas al final con el botón "Guardar respuestas".
+      <strong>Instrucciones.</strong> En cada pregunta escribe brevemente tu razonamiento antes de la respuesta final: nos interesa más <em>cómo</em> llegaste a ella que si es exacta. Al terminar, tendrás 5 minutos para explicar en voz alta cómo resolviste una pregunta a tu elección. Puedes escribir tus respuestas directamente aquí y guardarlas al final con el botón "Guardar respuestas".
     </div>
 
     <section class="block">
@@ -532,10 +603,47 @@
     <button id="btn-save" type="button">Guardar respuestas</button>
   </div>
 
-</div>
+</div><!-- /test-screen -->
+
+</div><!-- /page -->
 
 <script>
   var SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyc6nb0vV57zVKumXeaq5b7v-CCRgaEVR0q_RwZIl1xUmooPh8XAIhqCuYkDtxu-OuP/exec";
+
+  // ---- Pantalla de inicio + temporizador ----
+  var TOTAL_SECONDS = 60 * 60;
+  var remaining = TOTAL_SECONDS;
+  var timerInterval = null;
+
+  function formatTime(s){
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  document.getElementById('btn-start').addEventListener('click', function(){
+    var nombre = document.getElementById('meta-candidato').value.trim();
+    if (!nombre){
+      document.getElementById('start-error').textContent = 'Escribe tu nombre antes de iniciar.';
+      return;
+    }
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('test-screen').style.display = 'block';
+    document.getElementById('timer-candidato').textContent = nombre;
+
+    var clockEl = document.getElementById('timer-clock');
+    clockEl.textContent = formatTime(remaining);
+    timerInterval = setInterval(function(){
+      remaining--;
+      clockEl.textContent = formatTime(remaining);
+      if (remaining <= 300){ clockEl.classList.add('low'); }
+      if (remaining <= 0){
+        clearInterval(timerInterval);
+        clockEl.textContent = '00:00';
+        alert('El tiempo de la prueba terminó. Haz clic en "Guardar respuestas" para enviar lo que alcanzaste a responder.');
+      }
+    }, 1000);
+  });
 
   // Resalta visualmente la opción seleccionada
   document.querySelectorAll('.options').forEach(function(list){
