@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba Técnica — Desarrollador 1 | Satrack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0A1929;
+    --navy-800:#123049;
+    --navy-700:#1B4160;
+    --teal-500:#0FA3A3;
+    --teal-100:#E1F3F1;
+    --coral-500:#FF6B4A;
+    --paper:#FAF9F5;
+    --ink:#1C2430;
+    --ink-soft:#4B5563;
+    --line:#DCE2E6;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3,.brand-word{
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .page{
+    max-width:800px;
+    margin:0 auto;
+    padding:0 0 64px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    background:linear-gradient(160deg, var(--navy-950) 0%, var(--navy-800) 65%, var(--navy-700) 100%);
+    color:#fff;
+    padding:40px 44px 34px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    border:1.5px solid rgba(15,163,163,0.35);
+  }
+  header::before{
+    content:"";
+    position:absolute;
+    right:10px; top:20px;
+    width:120px; height:120px;
+    border-radius:50%;
+    border:1.5px solid rgba(15,163,163,0.25);
+  }
+  .brand-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:28px;
+  }
+  .brand-mark{
+    width:34px; height:34px;
+    border-radius:8px;
+    background:var(--teal-500);
+    position:relative;
+    flex:none;
+  }
+  .brand-mark::before{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:10px; height:10px;
+    background:var(--navy-950);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+  }
+  .brand-mark::after{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:20px; height:20px;
+    border:2px solid var(--navy-950);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    opacity:0.55;
+  }
+  .brand-word{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    color:#fff;
+  }
+  .brand-word span{color:var(--teal-500);}
+
+  header h1{
+    font-size:30px;
+    font-weight:600;
+    margin:0 0 8px;
+    max-width:520px;
+    line-height:1.25;
+  }
+  header p.subtitle{
+    margin:0;
+    color:#B9C6D3;
+    max-width:480px;
+    font-size:15px;
+  }
+
+  /* ---------- Meta fields ---------- */
+  .meta{
+    background:var(--card);
+    margin:-26px 44px 0;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(10,25,41,0.12);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    position:relative;
+    z-index:2;
+  }
+  .meta div{
+    padding:16px 18px;
+    border-right:1px solid var(--line);
+  }
+  .meta div:last-child{border-right:none;}
+  .meta label{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .meta .fill-line{
+    border-bottom:1px solid var(--line);
+    height:20px;
+  }
+
+  /* ---------- Body content ---------- */
+  .content{
+    padding:56px 44px 0;
+  }
+  .intro{
+    background:var(--teal-100);
+    border-left:3px solid var(--teal-500);
+    padding:18px 22px;
+    border-radius:0 10px 10px 0;
+    margin-bottom:36px;
+    font-size:14.5px;
+    color:#0B3D3D;
+  }
+  .intro strong{color:var(--navy-950);}
+
+  .summary-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:44px;
+    font-size:14px;
+  }
+  .summary-table caption{
+    text-align:left;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .summary-table th, .summary-table td{
+    padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+  }
+  .summary-table th{
+    color:var(--ink-soft);
+    font-weight:600;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .summary-table tr:last-child td{
+    border-bottom:none;
+    font-weight:600;
+    border-top:2px solid var(--navy-800);
+  }
+
+  .block{
+    margin-bottom:52px;
+  }
+  .block-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:2px solid var(--navy-950);
+    padding-bottom:10px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .block-head h2{
+    font-size:20px;
+    font-weight:600;
+    margin:0;
+    color:var(--navy-950);
+  }
+  .block-tag{
+    font-size:13px;
+    color:var(--teal-500);
+    font-weight:600;
+    white-space:nowrap;
+  }
+
+  .q{
+    margin-bottom:28px;
+    padding-bottom:24px;
+    border-bottom:1px dashed var(--line);
+  }
+  .q:last-child{border-bottom:none;}
+  .q-prompt{
+    display:flex;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .q-num{
+    flex:none;
+    width:28px; height:28px;
+    border-radius:50%;
+    background:var(--navy-950);
+    color:#fff;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .q-text{font-size:15.5px;}
+  .q-text em{color:var(--ink-soft); font-style:italic;}
+  .q-case{
+    background:#F2F4F6;
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:8px 0 0 40px;
+    font-family:'IBM Plex Sans', monospace;
+  }
+
+  .options{
+    list-style:none;
+    margin:14px 0 0 40px;
+    padding:0;
+    display:grid;
+    gap:8px;
+  }
+  .options li{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:14.5px;
+  }
+  .options .letter{
+    flex:none;
+    width:22px; height:22px;
+    border-radius:50%;
+    border:1.5px solid var(--navy-700);
+    color:var(--navy-700);
+    font-size:12px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .answer-lines{
+    margin:14px 0 0 40px;
+    height:74px;
+    border-radius:6px;
+    background:repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 23px,
+      var(--line) 23px,
+      var(--line) 24px
+    );
+  }
+  .answer-lines.short{height:24px;}
+
+  .ai-block{
+    margin-left:40px;
+    margin-top:10px;
+    display:grid;
+    gap:10px;
+  }
+  .ai-step{
+    background:#FFF6F2;
+    border:1px solid #FFD9CB;
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:14px;
+  }
+  .ai-step strong{color:var(--coral-500);}
+
+  .oral-note{
+    background:var(--navy-950);
+    color:#EAF1F5;
+    border-radius:10px;
+    padding:20px 24px;
+    font-size:14.5px;
+    margin:8px 0 48px;
+  }
+  .oral-note strong{color:var(--teal-500);}
+
+  footer{
+    margin:0 44px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  @media print{
+    body{background:#fff;}
+    .meta{box-shadow:none; border:1px solid var(--line);}
+  }
+  @media (max-width:640px){
+    header, .content, footer{padding-left:22px; padding-right:22px;}
+    .meta{margin-left:22px; margin-right:22px; grid-template-columns:repeat(2,1fr);}
+    .meta div:nth-child(2){border-right:none;}
+    .q-case, .options, .answer-lines, .ai-block{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="brand-row">
+      <div class="brand-mark"></div>
+      <div class="brand-word">sat<span>rack</span></div>
+    </div>
+    <h1>Prueba técnica — Desarrollador 1</h1>
+    <p class="subtitle">Evaluación de análisis, reconocimiento de patrones y resolución de problemas aplicados a casos reales de telemetría y flotas.</p>
+  </header>
+
+  <div class="meta">
+    <div><label>Candidato</label><div class="fill-line"></div></div>
+    <div><label>Fecha</label><div class="fill-line"></div></div>
+    <div><label>Cargo al que aplica</label><div class="fill-line"></div></div>
+    <div><label>Evaluador</label><div class="fill-line"></div></div>
+  </div>
+
+  <div class="content">
+
+    <div class="intro">
+      <strong>Instrucciones generales.</strong> Esta prueba tiene una duración total de 60 minutos, divididos en 5 bloques cronometrados. No necesitas conocimiento previo de GPS o flotas — todo el contexto que requieres está en cada enunciado. En cada pregunta escribe brevemente tu razonamiento antes de la respuesta final: nos interesa más <em>cómo</em> llegaste a ella que si es exacta. Al terminar, tendrás 5 minutos para explicar en voz alta cómo resolviste una pregunta a tu elección de los Bloques 2 o 3.
+    </div>
+
+    <!-- BLOQUE 1 -->
+    <section class="block">
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">1</span>
+          <span class="q-text">Un vehículo reporta estas velocidades (km/h) cada minuto: <em>0, 0, 5, 20, 45, 60, 58, 61, 0, 0</em>. ¿Qué patrón identificas y qué evento probablemente ocurrió?</span>
+        </div>
+        <div class="answer-lines"></div>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">2</span>
+          <span class="q-text">Un vehículo consume estos litros/100km durante 6 días: <em>8.2, 8.5, 8.1, 15.3, 8.4, 8.3</em>. ¿Qué día llama tu atención?</span>
+        </div>
+        <ul class="options">
+          <li><span class="letter">a</span> Fuga de combustible o mal funcionamiento del sensor ese día</li>
+          <li><span class="letter">b</span> El vehículo recorrió el doble de distancia ese día</li>
+          <li><span class="letter">c</span> Es una variación normal, no amerita revisión</li>
+          <li><span class="letter">d</span> El conductor cambió de ruta a una con más tráfico</li>
+        </ul>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">3</span>
+          <span class="q-text">Un cliente recibe alertas de "exceso de velocidad" todos los días entre 6:00–6:15am, siempre en la misma ruta. ¿Cuál es la hipótesis más probable?</span>
+        </div>
+        <ul class="options">
+          <li><span class="letter">a</span> El conductor siempre maneja mal a esa hora</li>
+          <li><span class="letter">b</span> El límite de velocidad configurado en esa geocerca no corresponde a la vía real</li>
+          <li><span class="letter">c</span> El GPS falla solo en las mañanas</li>
+          <li><span class="letter">d</span> Es una coincidencia, no amerita revisión</li>
+        </ul>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">4</span>
+          <span class="q-text">Los pagos de un cliente llegan así: <em>15 ene, 14 feb, 16 mar, 45 abr, 15 may</em>. ¿Qué llama tu atención de abril y qué seguimiento harías?</span>
+        </div>
+        <div class="answer-lines short"></div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 2 -->
+    <section class="block">
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">5</span>
+          <span class="q-text">Un vehículo reporta 3 posiciones casi idénticas en el mismo segundo por fallas de red. Describe en pasos cómo diseñarías la lógica para detectar y descartar los duplicados sin perder datos reales de movimiento.</span>
+        </div>
+        <div class="answer-lines"></div>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">6</span>
+          <span class="q-text">Un cliente reporta que su panel de reportes de flota tarda más de 30 segundos en cargar cuando selecciona "último mes". ¿Qué preguntas harías primero y cómo abordarías el diagnóstico paso a paso?</span>
+        </div>
+        <div class="answer-lines"></div>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">7</span>
+          <span class="q-text">Debes calcular una alerta de "exceso de velocidad" considerando que el límite varía según el tipo de vía (urbana, rural, autopista) y que el GPS a veces tiene error de +/- 5 km/h. ¿Qué casos borde debes considerar antes de programar la lógica?</span>
+        </div>
+        <div class="answer-lines"></div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 3 -->
+    <section class="block">
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">8</span>
+          <span class="q-text">El siguiente fragmento calcula distancia recorrida a partir de eventos GPS, pero suma distancia incluso cuando el vehículo está detenido (por ruido del sensor). Identifica el bug y propón el fix.</span>
+        </div>
+        <div class="q-case">[ Insertar aquí el fragmento de código real, en el lenguaje del stack (JS/C#) ]</div>
+        <div class="answer-lines"></div>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">9</span>
+          <span class="q-text">La siguiente función recorre miles de registros de posiciones para calcular kilometraje total, con un problema de rendimiento evidente (ej. consulta a base de datos dentro del loop). Identifícalo y propón una mejora.</span>
+        </div>
+        <div class="q-case">[ Insertar aquí el fragmento de código real ]</div>
+        <div class="answer-lines"></div>
+      </div>
+
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">10</span>
+          <span class="q-text">La siguiente función determina si un vehículo entró o salió de una geocerca, con un condicional mal planteado que genera falsos positivos. Predice el comportamiento con los datos de ejemplo dados y corrígelo.</span>
+        </div>
+        <div class="q-case">[ Insertar aquí el fragmento de código real + datos de ejemplo ]</div>
+        <div class="answer-lines"></div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 4 -->
+    <section class="block">
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">11</span>
+          <span class="q-text">Recibes al mismo tiempo: (a) un cliente reportando que <em>todos</em> sus vehículos dejaron de reportar posición hace 20 minutos, (b) un ticket de hace 3 días sobre un reporte con un dato mal calculado, y (c) la solicitud de un desarrollador senior para revisar un PR antes del mediodía. ¿En qué orden los atiendes y por qué?</span>
+        </div>
+        <div class="answer-lines"></div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 5 -->
+    <section class="block">
+      <div class="q">
+        <div class="q-prompt">
+          <span class="q-num">12</span>
+          <span class="q-text">Resuelve el siguiente problema usando el asistente de IA que prefieras (Copilot, ChatGPT, Claude, etc.): <em>"Escribe una función que determine si un vehículo se salió de una geocerca, dado un polígono y una coordenada."</em> Documenta tu proceso completo abajo — no solo el resultado final.</span>
+        </div>
+
+        <div class="ai-block">
+          <div class="ai-step"><strong>a) Prompt usado —</strong> escribe exactamente qué le pediste a la IA.</div>
+          <div class="answer-lines short"></div>
+
+          <div class="ai-step"><strong>b) Qué hiciste con la respuesta —</strong> ¿la usaste tal cual o la revisaste? ¿Qué cambiaste?</div>
+          <div class="answer-lines short"></div>
+
+          <div class="ai-step"><strong>c) Verificación —</strong> ¿qué parte de lo que generó la IA no estabas seguro que fuera correcta, y cómo lo comprobaste?</div>
+          <div class="answer-lines short"></div>
+
+          <div class="ai-step"><strong>d) Caso borde —</strong> prueba tu solución con una coordenada justo en el límite exacto del polígono. ¿Qué resultado da y era el esperado?</div>
+          <div class="answer-lines short"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="oral-note">
+      <strong>Cierre — defensa oral (5 min).</strong> Elige una pregunta del Bloque 2 o 3 y explica en voz alta, paso a paso, cómo llegaste a tu respuesta. No se evalúa si es perfecta, sino si tu razonamiento es claro y consistente con lo que escribiste.
+    </div>
+
+  </div>
+
+  <footer>
+    <span>Satrack · Gerencia de Ingeniería</span>
+    <span>Prueba técnica Desarrollador 1</span>
+  </footer>
+
+</div>
+</body>
+</html>
