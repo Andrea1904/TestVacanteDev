@@ -36,7 +36,7 @@
   .page{
     max-width:800px;
     margin:0 auto;
-    padding:0 0 64px;
+    padding:0 0 120px;
   }
 
   /* ---------- Header ---------- */
@@ -141,10 +141,17 @@
     color:var(--ink-soft);
     margin-bottom:6px;
   }
-  .meta .fill-line{
+  .meta input{
+    border:none;
     border-bottom:1px solid var(--line);
-    height:20px;
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14.5px;
+    padding:2px 0 4px;
+    background:transparent;
+    color:var(--ink);
   }
+  .meta input:focus{outline:none; border-bottom-color:var(--teal-500);}
 
   /* ---------- Body content ---------- */
   .content{
@@ -161,60 +168,8 @@
   }
   .intro strong{color:var(--navy-950);}
 
-  .summary-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-bottom:44px;
-    font-size:14px;
-  }
-  .summary-table caption{
-    text-align:left;
-    font-size:13px;
-    color:var(--ink-soft);
-    margin-bottom:8px;
-  }
-  .summary-table th, .summary-table td{
-    padding:10px 12px;
-    border-bottom:1px solid var(--line);
-    text-align:left;
-  }
-  .summary-table th{
-    color:var(--ink-soft);
-    font-weight:600;
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-  }
-  .summary-table tr:last-child td{
-    border-bottom:none;
-    font-weight:600;
-    border-top:2px solid var(--navy-800);
-  }
-
   .block{
     margin-bottom:52px;
-  }
-  .block-head{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    border-bottom:2px solid var(--navy-950);
-    padding-bottom:10px;
-    margin-bottom:22px;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .block-head h2{
-    font-size:20px;
-    font-weight:600;
-    margin:0;
-    color:var(--navy-950);
-  }
-  .block-tag{
-    font-size:13px;
-    color:var(--teal-500);
-    font-weight:600;
-    white-space:nowrap;
   }
 
   .q{
@@ -267,6 +222,25 @@
     border:1px solid var(--line);
     border-radius:8px;
     font-size:14.5px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .options li:hover{border-color:var(--teal-500);}
+  .options li.checked{
+    border-color:var(--teal-500);
+    background:var(--teal-100);
+  }
+  .options input[type="radio"]{
+    accent-color:var(--teal-500);
+    width:16px; height:16px;
+    flex:none;
+  }
+  .options label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    cursor:pointer;
   }
   .options .letter{
     flex:none;
@@ -281,19 +255,22 @@
     justify-content:center;
   }
 
-  .answer-lines{
+  textarea.answer{
+    display:block;
     margin:14px 0 0 40px;
-    height:74px;
-    border-radius:6px;
-    background:repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent 23px,
-      var(--line) 23px,
-      var(--line) 24px
-    );
+    width:calc(100% - 40px);
+    min-height:88px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    resize:vertical;
+    background:#fff;
   }
-  .answer-lines.short{height:24px;}
+  textarea.answer.short{min-height:44px;}
+  textarea.answer:focus{outline:none; border-color:var(--teal-500);}
 
   .ai-block{
     margin-left:40px;
@@ -309,6 +286,7 @@
     font-size:14px;
   }
   .ai-step strong{color:var(--coral-500);}
+  .ai-block textarea.answer{margin-left:0; width:100%;}
 
   .oral-note{
     background:var(--navy-950);
@@ -330,15 +308,59 @@
     color:var(--ink-soft);
   }
 
+  /* ---------- Save bar ---------- */
+  .save-bar{
+    position:sticky;
+    bottom:0;
+    left:0; right:0;
+    background:rgba(10,25,41,0.96);
+    backdrop-filter:blur(4px);
+    padding:14px 44px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:12px;
+    z-index:10;
+  }
+  .save-bar .status{
+    color:#B9C6D3;
+    font-size:13px;
+    margin-right:auto;
+  }
+  .save-bar button{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+  }
+  #btn-save{
+    background:var(--teal-500);
+    color:#04201E;
+  }
+  #btn-save:hover{background:#0dbdbd;}
+  #btn-print{
+    background:transparent;
+    color:#EAF1F5;
+    border:1px solid rgba(255,255,255,0.3) !important;
+  }
+  #btn-print:hover{border-color:#fff !important;}
+
   @media print{
     body{background:#fff;}
     .meta{box-shadow:none; border:1px solid var(--line);}
+    .save-bar{display:none;}
+    textarea.answer{border:1px solid var(--line);}
   }
   @media (max-width:640px){
     header, .content, footer{padding-left:22px; padding-right:22px;}
     .meta{margin-left:22px; margin-right:22px; grid-template-columns:repeat(2,1fr);}
     .meta div:nth-child(2){border-right:none;}
-    .q-case, .options, .answer-lines, .ai-block{margin-left:0;}
+    .q-case, .options{margin-left:0;}
+    textarea.answer{margin-left:0; width:100%;}
+    .save-bar{padding:14px 22px; flex-wrap:wrap;}
   }
 </style>
 </head>
@@ -355,26 +377,26 @@
   </header>
 
   <div class="meta">
-    <div><label>Candidato</label><div class="fill-line"></div></div>
-    <div><label>Fecha</label><div class="fill-line"></div></div>
-    <div><label>Cargo al que aplica</label><div class="fill-line"></div></div>
-    <div><label>Evaluador</label><div class="fill-line"></div></div>
+    <div><label>Candidato</label><input id="meta-candidato" type="text" placeholder="Nombre completo"></div>
+    <div><label>Fecha</label><input id="meta-fecha" type="date"></div>
+    <div><label>Cargo al que aplica</label><input id="meta-cargo" type="text" placeholder="Desarrollador 1"></div>
+    <div><label>Evaluador</label><input id="meta-evaluador" type="text" placeholder="Nombre del evaluador"></div>
   </div>
 
   <div class="content">
 
     <div class="intro">
-      <strong>Instrucciones generales.</strong> Esta prueba tiene una duración total de 60 minutos, divididos en 5 bloques cronometrados. No necesitas conocimiento previo de GPS o flotas — todo el contexto que requieres está en cada enunciado. En cada pregunta escribe brevemente tu razonamiento antes de la respuesta final: nos interesa más <em>cómo</em> llegaste a ella que si es exacta. Al terminar, tendrás 5 minutos para explicar en voz alta cómo resolviste una pregunta a tu elección de los Bloques 2 o 3.
+      <strong>Instrucciones generales.</strong> Esta prueba tiene una duración total de 60 minutos, divididos en 5 bloques cronometrados. No necesitas conocimiento previo de GPS o flotas — todo el contexto que requieres está en cada enunciado. En cada pregunta escribe brevemente tu razonamiento antes de la respuesta final: nos interesa más <em>cómo</em> llegaste a ella que si es exacta. Al terminar, tendrás 5 minutos para explicar en voz alta cómo resolviste una pregunta a tu elección de los Bloques 2 o 3. Puedes escribir tus respuestas directamente aquí y descargarlas al final con el botón "Guardar respuestas".
     </div>
 
-    <!-- BLOQUE 1 -->
     <section class="block">
+
       <div class="q">
         <div class="q-prompt">
           <span class="q-num">1</span>
           <span class="q-text">Un vehículo reporta estas velocidades (km/h) cada minuto: <em>0, 0, 5, 20, 45, 60, 58, 61, 0, 0</em>. ¿Qué patrón identificas y qué evento probablemente ocurrió?</span>
         </div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="1. Patrón de velocidades" id="q1"></textarea>
       </div>
 
       <div class="q">
@@ -382,11 +404,11 @@
           <span class="q-num">2</span>
           <span class="q-text">Un vehículo consume estos litros/100km durante 6 días: <em>8.2, 8.5, 8.1, 15.3, 8.4, 8.3</em>. ¿Qué día llama tu atención?</span>
         </div>
-        <ul class="options">
-          <li><span class="letter">a</span> Fuga de combustible o mal funcionamiento del sensor ese día</li>
-          <li><span class="letter">b</span> El vehículo recorrió el doble de distancia ese día</li>
-          <li><span class="letter">c</span> Es una variación normal, no amerita revisión</li>
-          <li><span class="letter">d</span> El conductor cambió de ruta a una con más tráfico</li>
+        <ul class="options" id="q2" data-qlabel="2. Consumo de combustible">
+          <li><label><input type="radio" name="q2" value="a"><span class="letter">a</span> Fuga de combustible o mal funcionamiento del sensor ese día</label></li>
+          <li><label><input type="radio" name="q2" value="b"><span class="letter">b</span> El vehículo recorrió el doble de distancia ese día</label></li>
+          <li><label><input type="radio" name="q2" value="c"><span class="letter">c</span> Es una variación normal, no amerita revisión</label></li>
+          <li><label><input type="radio" name="q2" value="d"><span class="letter">d</span> El conductor cambió de ruta a una con más tráfico</label></li>
         </ul>
       </div>
 
@@ -395,11 +417,11 @@
           <span class="q-num">3</span>
           <span class="q-text">Un cliente recibe alertas de "exceso de velocidad" todos los días entre 6:00–6:15am, siempre en la misma ruta. ¿Cuál es la hipótesis más probable?</span>
         </div>
-        <ul class="options">
-          <li><span class="letter">a</span> El conductor siempre maneja mal a esa hora</li>
-          <li><span class="letter">b</span> El límite de velocidad configurado en esa geocerca no corresponde a la vía real</li>
-          <li><span class="letter">c</span> El GPS falla solo en las mañanas</li>
-          <li><span class="letter">d</span> Es una coincidencia, no amerita revisión</li>
+        <ul class="options" id="q3" data-qlabel="3. Alertas repetidas de velocidad">
+          <li><label><input type="radio" name="q3" value="a"><span class="letter">a</span> El conductor siempre maneja mal a esa hora</label></li>
+          <li><label><input type="radio" name="q3" value="b"><span class="letter">b</span> El límite de velocidad configurado en esa geocerca no corresponde a la vía real</label></li>
+          <li><label><input type="radio" name="q3" value="c"><span class="letter">c</span> El GPS falla solo en las mañanas</label></li>
+          <li><label><input type="radio" name="q3" value="d"><span class="letter">d</span> Es una coincidencia, no amerita revisión</label></li>
         </ul>
       </div>
 
@@ -408,18 +430,15 @@
           <span class="q-num">4</span>
           <span class="q-text">Los pagos de un cliente llegan así: <em>15 ene, 14 feb, 16 mar, 45 abr, 15 may</em>. ¿Qué llama tu atención de abril y qué seguimiento harías?</span>
         </div>
-        <div class="answer-lines short"></div>
+        <textarea class="answer short" data-qlabel="4. Patrón de pagos" id="q4"></textarea>
       </div>
-    </section>
 
-    <!-- BLOQUE 2 -->
-    <section class="block">
       <div class="q">
         <div class="q-prompt">
           <span class="q-num">5</span>
           <span class="q-text">Un vehículo reporta 3 posiciones casi idénticas en el mismo segundo por fallas de red. Describe en pasos cómo diseñarías la lógica para detectar y descartar los duplicados sin perder datos reales de movimiento.</span>
         </div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="5. Duplicados GPS" id="q5"></textarea>
       </div>
 
       <div class="q">
@@ -427,7 +446,7 @@
           <span class="q-num">6</span>
           <span class="q-text">Un cliente reporta que su panel de reportes de flota tarda más de 30 segundos en cargar cuando selecciona "último mes". ¿Qué preguntas harías primero y cómo abordarías el diagnóstico paso a paso?</span>
         </div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="6. Dashboard lento" id="q6"></textarea>
       </div>
 
       <div class="q">
@@ -435,19 +454,16 @@
           <span class="q-num">7</span>
           <span class="q-text">Debes calcular una alerta de "exceso de velocidad" considerando que el límite varía según el tipo de vía (urbana, rural, autopista) y que el GPS a veces tiene error de +/- 5 km/h. ¿Qué casos borde debes considerar antes de programar la lógica?</span>
         </div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="7. Casos borde alerta de velocidad" id="q7"></textarea>
       </div>
-    </section>
 
-    <!-- BLOQUE 3 -->
-    <section class="block">
       <div class="q">
         <div class="q-prompt">
           <span class="q-num">8</span>
           <span class="q-text">El siguiente fragmento calcula distancia recorrida a partir de eventos GPS, pero suma distancia incluso cuando el vehículo está detenido (por ruido del sensor). Identifica el bug y propón el fix.</span>
         </div>
         <div class="q-case">[ Insertar aquí el fragmento de código real, en el lenguaje del stack (JS/C#) ]</div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="8. Bug distancia recorrida" id="q8"></textarea>
       </div>
 
       <div class="q">
@@ -456,7 +472,7 @@
           <span class="q-text">La siguiente función recorre miles de registros de posiciones para calcular kilometraje total, con un problema de rendimiento evidente (ej. consulta a base de datos dentro del loop). Identifícalo y propón una mejora.</span>
         </div>
         <div class="q-case">[ Insertar aquí el fragmento de código real ]</div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="9. Rendimiento del loop" id="q9"></textarea>
       </div>
 
       <div class="q">
@@ -465,23 +481,17 @@
           <span class="q-text">La siguiente función determina si un vehículo entró o salió de una geocerca, con un condicional mal planteado que genera falsos positivos. Predice el comportamiento con los datos de ejemplo dados y corrígelo.</span>
         </div>
         <div class="q-case">[ Insertar aquí el fragmento de código real + datos de ejemplo ]</div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="10. Falsos positivos geocerca" id="q10"></textarea>
       </div>
-    </section>
 
-    <!-- BLOQUE 4 -->
-    <section class="block">
       <div class="q">
         <div class="q-prompt">
           <span class="q-num">11</span>
           <span class="q-text">Recibes al mismo tiempo: (a) un cliente reportando que <em>todos</em> sus vehículos dejaron de reportar posición hace 20 minutos, (b) un ticket de hace 3 días sobre un reporte con un dato mal calculado, y (c) la solicitud de un desarrollador senior para revisar un PR antes del mediodía. ¿En qué orden los atiendes y por qué?</span>
         </div>
-        <div class="answer-lines"></div>
+        <textarea class="answer" data-qlabel="11. Priorización de tickets" id="q11"></textarea>
       </div>
-    </section>
 
-    <!-- BLOQUE 5 -->
-    <section class="block">
       <div class="q">
         <div class="q-prompt">
           <span class="q-num">12</span>
@@ -490,16 +500,16 @@
 
         <div class="ai-block">
           <div class="ai-step"><strong>a) Prompt usado —</strong> escribe exactamente qué le pediste a la IA.</div>
-          <div class="answer-lines short"></div>
+          <textarea class="answer short" data-qlabel="12a. Prompt usado" id="q12a"></textarea>
 
           <div class="ai-step"><strong>b) Qué hiciste con la respuesta —</strong> ¿la usaste tal cual o la revisaste? ¿Qué cambiaste?</div>
-          <div class="answer-lines short"></div>
+          <textarea class="answer short" data-qlabel="12b. Qué hizo con la respuesta" id="q12b"></textarea>
 
           <div class="ai-step"><strong>c) Verificación —</strong> ¿qué parte de lo que generó la IA no estabas seguro que fuera correcta, y cómo lo comprobaste?</div>
-          <div class="answer-lines short"></div>
+          <textarea class="answer short" data-qlabel="12c. Verificación" id="q12c"></textarea>
 
           <div class="ai-step"><strong>d) Caso borde —</strong> prueba tu solución con una coordenada justo en el límite exacto del polígono. ¿Qué resultado da y era el esperado?</div>
-          <div class="answer-lines short"></div>
+          <textarea class="answer short" data-qlabel="12d. Caso borde" id="q12d"></textarea>
         </div>
       </div>
     </section>
@@ -515,6 +525,102 @@
     <span>Prueba técnica Desarrollador 1</span>
   </footer>
 
+  <div class="save-bar">
+    <span class="status" id="save-status">Tus respuestas no se guardan automáticamente — usa "Guardar respuestas" al terminar.</span>
+    <button id="btn-print" type="button">Imprimir / PDF</button>
+    <button id="btn-save" type="button">Guardar respuestas</button>
+  </div>
+
 </div>
+
+<script>
+  var SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyc6nb0vV57zVKumXeaq5b7v-CCRgaEVR0q_RwZIl1xUmooPh8XAIhqCuYkDtxu-OuP/exec";
+
+  // Resalta visualmente la opción seleccionada
+  document.querySelectorAll('.options').forEach(function(list){
+    list.querySelectorAll('input[type="radio"]').forEach(function(radio){
+      radio.addEventListener('change', function(){
+        list.querySelectorAll('li').forEach(function(li){ li.classList.remove('checked'); });
+        radio.closest('li').classList.add('checked');
+      });
+    });
+  });
+
+  document.getElementById('btn-print').addEventListener('click', function(){
+    window.print();
+  });
+
+  document.getElementById('btn-save').addEventListener('click', function(){
+    var candidato = document.getElementById('meta-candidato').value.trim() || 'sin-nombre';
+    var fecha = document.getElementById('meta-fecha').value || 'sin-fecha';
+    var cargo = document.getElementById('meta-cargo').value.trim() || '—';
+    var evaluador = document.getElementById('meta-evaluador').value.trim() || '—';
+
+    // Arma el payload para enviarlo al Google Sheet
+    var payload = {
+      candidato: candidato,
+      fecha: fecha,
+      cargo: cargo,
+      evaluador: evaluador
+    };
+    document.querySelectorAll('textarea.answer').forEach(function(ta){
+      payload[ta.id] = ta.value.trim();
+    });
+    document.querySelectorAll('.options').forEach(function(list){
+      var checked = list.querySelector('input[type="radio"]:checked');
+      payload[list.id] = checked ? checked.value.toUpperCase() : '';
+    });
+
+    var statusEl = document.getElementById('save-status');
+    statusEl.textContent = 'Enviando respuestas a la hoja de Satrack…';
+
+    fetch(SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function(){
+      statusEl.textContent = 'Respuestas enviadas a la hoja de Satrack ✓ — también se descargó una copia local.';
+    }).catch(function(){
+      statusEl.textContent = 'No se pudo enviar a la hoja (revisa tu conexión) — se descargó una copia local igualmente.';
+    });
+
+    var lines = [];
+    lines.push('PRUEBA TÉCNICA — DESARROLLADOR 1 · SATRACK');
+    lines.push('Candidato: ' + candidato);
+    lines.push('Fecha: ' + fecha);
+    lines.push('Cargo: ' + cargo);
+    lines.push('Evaluador: ' + evaluador);
+    lines.push('');
+    lines.push('----------------------------------------');
+    lines.push('');
+
+    document.querySelectorAll('textarea.answer').forEach(function(ta){
+      lines.push(ta.getAttribute('data-qlabel'));
+      lines.push(ta.value.trim() || '(sin respuesta)');
+      lines.push('');
+    });
+
+    document.querySelectorAll('.options').forEach(function(list){
+      var label = list.getAttribute('data-qlabel');
+      var checked = list.querySelector('input[type="radio"]:checked');
+      lines.push(label);
+      lines.push(checked ? ('Opción seleccionada: ' + checked.value.toUpperCase()) : '(sin respuesta)');
+      lines.push('');
+    });
+
+    var blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    var safeName = candidato.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    a.download = 'respuestas-' + safeName + '-' + fecha + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+
 </body>
 </html>
