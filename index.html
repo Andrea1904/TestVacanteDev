@@ -6,7 +6,7 @@
 <title>Prueba Técnica — Desarrollador 1 | Satrack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy-950:#0A1929;
@@ -255,11 +255,15 @@
     background:#F2F4F6;
     border-radius:8px;
     padding:12px 14px;
-    font-size:14px;
+    font-size:13.5px;
     color:var(--ink-soft);
     margin:8px 0 0 40px;
-    font-family:'IBM Plex Sans', monospace;
+    font-family:'IBM Plex Mono', 'Courier New', monospace;
+    white-space:pre-wrap;
+    overflow-x:auto;
+    line-height:1.5;
   }
+  .q-case + .q-case{margin-top:14px;}
 
   .options{
     list-style:none;
@@ -395,12 +399,6 @@
     color:#04201E;
   }
   #btn-save:hover{background:#0dbdbd;}
-  #btn-print{
-    background:transparent;
-    color:#EAF1F5;
-    border:1px solid rgba(255,255,255,0.3) !important;
-  }
-  #btn-print:hover{border-color:#fff !important;}
 
   @media print{
     body{background:#fff;}
@@ -534,7 +532,24 @@
           <span class="q-num">8</span>
           <span class="q-text">El siguiente fragmento calcula distancia recorrida a partir de eventos GPS, pero suma distancia incluso cuando el vehículo está detenido (por ruido del sensor). Identifica el bug y propón el fix.</span>
         </div>
-        <div class="q-case">[ Insertar aquí el fragmento de código real, en el lenguaje del stack (JS/C#) ]</div>
+        <div class="q-case">public double CalcularDistanciaRecorrida(List&lt;PosicionGps&gt; posiciones)
+{
+    double distanciaTotal = 0;
+
+    for (int i = 1; i &lt; posiciones.Count; i++)
+    {
+        var anterior = posiciones[i - 1];
+        var actual = posiciones[i];
+
+        double distancia = CalcularDistanciaHaversine(
+            anterior.Latitud, anterior.Longitud,
+            actual.Latitud, actual.Longitud);
+
+        distanciaTotal += distancia;
+    }
+
+    return distanciaTotal;
+}</div>
         <textarea class="answer" data-qlabel="8. Bug distancia recorrida" id="q8"></textarea>
       </div>
 
@@ -543,7 +558,28 @@
           <span class="q-num">9</span>
           <span class="q-text">La siguiente función recorre miles de registros de posiciones para calcular kilometraje total, con un problema de rendimiento evidente (ej. consulta a base de datos dentro del loop). Identifícalo y propón una mejora.</span>
         </div>
-        <div class="q-case">[ Insertar aquí el fragmento de código real ]</div>
+        <div class="q-case">public double CalcularKilometrajeTotal(List&lt;int&gt; vehiculoIds)
+{
+    double kilometrajeTotal = 0;
+
+    foreach (var vehiculoId in vehiculoIds)
+    {
+        var posiciones = _dbContext.PosicionesGps
+            .Where(p =&gt; p.VehiculoId == vehiculoId)
+            .OrderBy(p =&gt; p.Timestamp)
+            .ToList();
+
+        for (int i = 1; i &lt; posiciones.Count; i++)
+        {
+            kilometrajeTotal += CalcularDistanciaHaversine(
+                posiciones[i - 1].Latitud, posiciones[i - 1].Longitud,
+                posiciones[i].Latitud, posiciones[i].Longitud);
+        }
+    }
+
+    return kilometrajeTotal;
+}
+// Se llama con vehiculoIds de ~500 vehículos activos</div>
         <textarea class="answer" data-qlabel="9. Rendimiento del loop" id="q9"></textarea>
       </div>
 
@@ -552,7 +588,28 @@
           <span class="q-num">10</span>
           <span class="q-text">La siguiente función determina si un vehículo entró o salió de una geocerca, con un condicional mal planteado que genera falsos positivos. Predice el comportamiento con los datos de ejemplo dados y corrígelo.</span>
         </div>
-        <div class="q-case">[ Insertar aquí el fragmento de código real + datos de ejemplo ]</div>
+        <div class="q-case">public bool DetectarEntradaGeocerca(Coordenada posicionActual, Poligono geocerca, bool estabaDentroAntes)
+{
+    bool estaDentroAhora = PuntoEnPoligono(posicionActual, geocerca);
+
+    if (estaDentroAhora || estabaDentroAntes)
+    {
+        return true; // Dispara evento de "entrada a geocerca"
+    }
+
+    return false;
+}</div>
+        <div class="q-case">Secuencia de posiciones recibidas para el mismo vehículo:
+
+Hora   | ¿Dentro del polígono? | estabaDentroAntes
+09:00  | No                     | false
+09:01  | No                     | false
+09:02  | Sí                     | false
+09:03  | Sí                     | true
+09:04  | Sí                     | true
+09:05  | No                     | true
+
+¿Cuántas veces se dispara el evento de "entrada" con esta secuencia? ¿Es el comportamiento correcto?</div>
         <textarea class="answer" data-qlabel="10. Falsos positivos geocerca" id="q10"></textarea>
       </div>
 
@@ -599,7 +656,6 @@
 
   <div class="save-bar">
     <span class="status" id="save-status">Tus respuestas no se guardan automáticamente — usa "Guardar respuestas" al terminar.</span>
-   
     <button id="btn-save" type="button">Guardar respuestas</button>
   </div>
 
@@ -653,10 +709,6 @@
         radio.closest('li').classList.add('checked');
       });
     });
-  });
-
-  document.getElementById('btn-print').addEventListener('click', function(){
-    window.print();
   });
 
   document.getElementById('btn-save').addEventListener('click', function(){
